@@ -43,7 +43,7 @@
         var query = new esri.tasks.Query();
         query.returnGeometry = true;
         //query.outFields = ["POP2000","HOUSEHOLDS","HSE_UNITS", "TRACT", "BLOCK"];
-        query.outFields = ["TYPE"];
+        query.outFields = ["POP2000","TYPE"];
 
         //Geometry Service Endpoint
         var gsvc = new esri.tasks.GeometryService("http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer");
@@ -74,7 +74,7 @@
           query.geometry = esri.geometry.webMercatorToGeographic(geometries[0]);
           query.outSpatialReference = {"wkid":102100};
           queryTask.execute(query);
-          dojo.byId('messages').innerHTML = "<b>Executing Query with Result Buffer Geometry...</b>";
+          //dojo.byId('messages').innerHTML = "<b>Executing Query with Result Buffer Geometry...</b>";
         });
 
         // Listen for QueryTask executecomplete event
@@ -97,7 +97,7 @@
 
           var totalPopulation = sumPopulation(fset);
           var r = "";
-          r = "<b>The total Census Block population within the buffer is <i>" + totalPopulation + "</i>.</b>";
+          //r = "<b>The total Census Block population within the buffer is <i>" + totalPopulation + "</i>.</b>";
           dojo.byId('messages').innerHTML = r;
         });
       }
@@ -107,6 +107,7 @@
         var popTotal = 0;
         for (var x = 0; x < features.length; x++) {
           popTotal = popTotal + features[x].attributes['POP2000'];
+          console.log(popTotal);
         }
         return popTotal;
       }

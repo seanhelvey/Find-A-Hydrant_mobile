@@ -20,12 +20,13 @@
 
       // Initialize map, buffer, & query params
       function init() {
+
         map = new esri.Map("mapDiv", { 
           basemap: "streets",
           center: [-105, 40],
           zoom: 14
         });
-        
+
         //listen for when map is loaded and then add query functionality
         dojo.connect(map, "onLoad", initFunctionality);
       }
@@ -42,10 +43,12 @@
         var query = new esri.tasks.Query();
         query.returnGeometry = true;
         //query.outFields = ["POP2000","HOUSEHOLDS","HSE_UNITS", "TRACT", "BLOCK"];
-        query.outFields = ["POP2000","HOUSEHOLDS","HSE_UNITS", "TRACT", "BLOCK"];
+        query.outFields = ["POP2000","TYPE"];
 
         //Geometry Service Endpoint
         var gsvc = new esri.tasks.GeometryService("http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer");
+
+        initFunc(map);
 
         // Listen for map onClick event
         dojo.connect(map, "onClick", function(evt) {
@@ -95,7 +98,7 @@
           var totalPopulation = sumPopulation(fset);
           var r = "";
           r = "<b>The total Census Block population within the buffer is <i>" + totalPopulation + "</i>.</b>";
-          dojo.byId('messages').innerHTML = r;
+          //dojo.byId('messages').innerHTML = r;
         });
       }
 
@@ -104,11 +107,65 @@
         var popTotal = 0;
         for (var x = 0; x < features.length; x++) {
           popTotal = popTotal + features[x].attributes['POP2000'];
+          console.log(popTotal);
         }
         return popTotal;
       }
 
+      function initFunc(map) {
+       dojo.connect(window, 'resize', map,map.resize);
+        if(navigator.geolocation){  
+          navigator.geolocation.getCurrentPosition(zoomToLocation, locationError);
+          watchId = navigator.geolocation.watchPosition(showLocation, locationError);
+        }
+        else{
+          alert("Browser doesn't support Geolocation. Visit http://caniuse.com to discover browser support for the Geolocation API.");
+        }
+      }
+
+      function locationError(error){
+        switch(error.code){
+          case error.PERMISSION_DENIED: alert("Location not provided");
+            break;
+          case error.POSITION_UNAVAILABLE: alert("Current location not available");
+            break;
+          case error.TIMEOUT: alert("Timeout");
+            break;
+          default: alert("unknown error");
+            break;
+        }
+      }      
+
+      function zoomToLocation(location) {
+        var pt = esri.geometry.geographicToWebMercator(new esri.geometry.Point(location.coords.longitude, location.coords.latitude));
+        addGraphic(pt);    
+        map.centerAndZoom(pt, 12);
+      }
+
+      function showLocation(location) {
+        //zoom to the users location and add a graphic
+        var pt = esri.geometry.geographicToWebMercator(new esri.geometry.Point(location.coords.longitude, location.coords.latitude));
+        if (!graphic) {
+          addGraphic(pt);
+        }
+        else { //move the graphic if it already exists
+          graphic.setGeometry(pt);
+        }
+        map.centerAt(pt);
+      }
+
+      function addGraphic(pt){
+        var symbol = new esri.symbol.SimpleMarkerSymbol(esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE, 12, 
+          new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID,
+          new dojo.Color([210, 105, 30, 0.5]), 8), 
+          new dojo.Color([210, 105, 30, 0.9])
+        );
+        graphic = new esri.Graphic(pt, symbol);
+        map.graphics.add(graphic);
+      }      
+
       dojo.ready(init);
+
     </script>
   </head>
 
