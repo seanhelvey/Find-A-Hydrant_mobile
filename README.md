@@ -5,7 +5,8 @@ Find-A-Hydrant Fire Hydrant Locator
 
 PhoneGap implementation  
 
-Get it on your phone! [PhoneGap](https://build.phonegap.com/apps/368212/builds "PhoneGap")  
+Get it on your phone! [PhoneGap](https://build.phonegap.com/apps/368212/builds "PhoneGap") 
+   
 iOS implementation is slightly buggy. Android works fairly well.  
   
 Please fork and add features or data for other cities.
