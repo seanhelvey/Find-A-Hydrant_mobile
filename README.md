@@ -3,4 +3,9 @@ Find-A-Hydrant Fire Hydrant Locator
 
 *The City of Longmont, Colorado*
 
-PhoneGap implementation
+PhoneGap implementation  
+
+Get it on your phone! [PhoneGap](https://build.phonegap.com/apps/368212/builds "PhoneGap")  
+iOS implementation is slightly buggy. Android works fairly well.  
+  
+Please fork and add features or data for other cities.
