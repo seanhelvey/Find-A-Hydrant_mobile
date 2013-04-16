@@ -74,7 +74,7 @@
           query.geometry = esri.geometry.webMercatorToGeographic(geometries[0]);
           query.outSpatialReference = {"wkid":102100};
           queryTask.execute(query);
-          dojo.byId('messages').innerHTML = "<b>Executing Query with Result Buffer Geometry...</b>";
+          //dojo.byId('messages').innerHTML = "<b>Executing Query with Result Buffer Geometry...</b>";
         });
 
         // Listen for QueryTask executecomplete event
@@ -97,8 +97,8 @@
 
           var totalPopulation = sumPopulation(fset);
           var r = "";
-          r = "<b>The total Census Block population within the buffer is <i>" + totalPopulation + "</i>.</b>";
-          //dojo.byId('messages').innerHTML = r;
+          //r = "<b>The total Census Block population within the buffer is <i>" + totalPopulation + "</i>.</b>";
+          dojo.byId('messages').innerHTML = r;
         });
       }
 
